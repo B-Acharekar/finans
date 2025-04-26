@@ -19,7 +19,7 @@ const Header = () => {
         {/* Desktop Menu */}
         <nav className="hidden md:flex md:flex-row md:items-center lg:text-base">
           {["Home", "Features", "Pricing", "Testimonials"].map((item) => (
-            <Link key={item} href={`#${item.toLowerCase()}`} className="ml-12 font-bold duration-100 hover:text-indigo-600">
+            <Link key={item} href={`#${item.toLowerCase()}`} className="ml-12 font-bold duration-100 hover:text-pink-600">
               {item}
             </Link>
           ))}
@@ -28,7 +28,7 @@ const Header = () => {
         {/* CTA buttons (desktop only) */}
         <div className="hidden md:flex md:items-end md:relative ml-6">
           <Link href="#_" className="px-3 py-2 mr-3 text-sm font-bold text-pink-500">Login</Link>
-          <Link href="#_" className="px-5 py-3 text-sm font-bold text-white bg-indigo-700 rounded hover:shadow-xl transition-all">Get Started</Link>
+          <Link href="/signup" className="px-5 py-3 text-sm font-bold text-white bg-pink-600 rounded hover:shadow-xl transition-all">Get Started</Link>
         </div>
 
         {/* Mobile menu toggle button */}
@@ -43,13 +43,13 @@ const Header = () => {
         {isOpen && (
           <nav className="absolute top-24 left-0 z-40 flex flex-col items-center w-full p-5 text-sm text-gray-800 bg-white border-t border-gray-200 md:hidden">
             {["Home", "Features", "Pricing", "Testimonials"].map((item) => (
-              <Link key={item} href={`#${item.toLowerCase()}`} className="py-2 font-bold hover:text-indigo-600 w-full text-center">
+              <Link key={item} href={`#${item.toLowerCase()}`} className="py-2 font-bold hover:text-pink-600 w-full text-center">
                 {item}
               </Link>
             ))}
             <div className="flex flex-col w-full font-medium border-t border-gray-200 mt-3">
-              <Link href="#_" className="w-full py-2 font-bold text-center text-pink-500">Login</Link>
-              <Link href="#_" className="w-full px-5 py-3 text-sm text-center text-white bg-indigo-700 font-bold mt-2 rounded">Get Started</Link>
+              <Link href="/login" className="w-full py-2 font-bold text-center text-pink-500">Login</Link>
+              <Link href="/signup" className="w-full px-5 py-3 text-sm text-center text-white bg-pink-700 font-bold mt-2 rounded">Get Started</Link>
             </div>
           </nav>
         )}
