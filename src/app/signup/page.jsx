@@ -1,5 +1,5 @@
 "use client";
-
+import { signup } from "@/lib/auth"; // adjust path if needed
 import { useState } from "react";
 import "./signup.css"; // Make sure this file exists or remove if unnecessary
 
@@ -9,12 +9,26 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState(""); // Added
 
-  const handleSignup = (e) => {
+  // Inside your SignupPage component
+  const handleSignup = async (e) => {
     e.preventDefault();
-    console.log("Signup submitted:", { name, email, password, confirmPassword });
-    // Here you can add validation like checking if password === confirmPassword
-    // and then call your signup API.
-  };
+  
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+  
+    try {
+      const user = await signup(email, password, name);
+      console.log("Signup successful:", user);
+  
+      // No need to call updateProfile here, it's already handled inside signup()
+  
+    } catch (error) {
+      console.error("Error signing up:", error);
+      alert(error.message);
+    }
+  };  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black-100 dark:bg-black-700 py-4 px-4 sm:px-6 lg:px-8">

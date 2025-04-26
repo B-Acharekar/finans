@@ -1,16 +1,34 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation"; // Use next/navigation instead of next/router
+
+import { login } from "@/lib/auth"; // adjust path if needed
 import "./login.css"; // Make sure this file exists or remove if unnecessary
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(""); // Initial error state is an empty string
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("login submitted:", { email, password });
-    // You can add your login API call here
+  const router = useRouter(); // Add this line
+
+
+  const handleSubmit = async (e) => {
+      e.preventDefault();
+      setError(""); // Clear previous errors
+
+      try {
+          const user = await login(email, password); // Use login function from auth.js
+          console.log("Logged in user:", user);
+          // Redirect to another page after successful login
+          router.push("/home");  // Add this line to redirect to home page
+          // For example, using Next.js router:
+          // router.push("/dashboard");
+      } catch (error) {
+          console.log(error.message); // Display the error if login fails
+          setError(error.message); // Set the error message to display it to the user
+      }
   };
 
   return (
@@ -100,6 +118,7 @@ export default function LoginPage() {
               Sign In
             </button>
           </form>
+          {error && <p>{error}</p>} {/* Display error message if there's an error */}
 
           <p className="mt-6 text-xs text-center text-gray-400">
             Don’t have an account yet?
