@@ -481,6 +481,7 @@ export default function HomePage() {
           </div>
         </div>
         {/*END FEATURES SECTION*/}
+
         {/* Pricing Section */}
         <div className="relative px-8 py-10 bg-white border-t border-gray-200 md:py-16 lg:py-24 xl:py-40 xl:px-0">
           <div
