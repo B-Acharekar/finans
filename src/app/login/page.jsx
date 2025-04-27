@@ -22,7 +22,7 @@ export default function LoginPage() {
           const user = await login(email, password); // Use login function from auth.js
           console.log("Logged in user:", user);
           // Redirect to another page after successful login
-          router.push("/home");  // Add this line to redirect to home page
+          router.push("/dashboard");  // Add this line to redirect to home page
           // For example, using Next.js router:
           // router.push("/dashboard");
       } catch (error) {
