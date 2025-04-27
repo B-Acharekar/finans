@@ -1,6 +1,6 @@
 // lib/auth.js
 import { auth } from "../lib/firebase";
-import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 
 // Signup function
 export async function signup(email, password, name) {
@@ -9,6 +9,10 @@ export async function signup(email, password, name) {
     if (name) {
       await updateProfile(user, { displayName: name });
     }
+    await sendEmailVerification(user,{
+      url: 'http://localhost:3000/login',
+      handleCodeInApp: false,
+    });
     return user;
   } catch (error) {
     console.error("Error signing up:", error);

@@ -22,13 +22,18 @@ export default function SignupPage() {
       const user = await signup(email, password, name);
       console.log("Signup successful:", user);
   
-      // No need to call updateProfile here, it's already handled inside signup()
+      // ✨ Show verification success message
+      alert("Signup successful! A verification email has been sent. Please verify your email before logging in.");
+  
+      // ✨ Optional: Redirect to login page
+      window.location.href = "/login";
   
     } catch (error) {
       console.error("Error signing up:", error);
       alert(error.message);
     }
-  };  
+  };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black-100 dark:bg-black-700 py-4 px-4 sm:px-6 lg:px-8">
