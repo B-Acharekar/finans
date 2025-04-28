@@ -1,18 +1,19 @@
-
-import Header from "@/components/header";
-import Footer from "@/components/footer";
+import DashboardHeader from "@/components/header/DashboardHeader";
+import Footer from "@/components/footer/DashboardFooter";
 
 export default function HomePage() {
   return (
     <div>
-      <Header />
+      <DashboardHeader />
       <main>
         <div className="mx-auto max-w-(--breakpoint-2xl) p-4 md:p-6">
           <div className="grid grid-cols-12 gap-4 md:gap-6">
             <div className="col-span-12">
+
               {/* Metric Group Three */}
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 xl:grid-cols-3">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6 lg:grid-cols-4 xl:grid-cols-4">
                 {/* Metric Item Start */}
+
                 <div className="rounded-2xl border border-pink-200 bg-white p-5 dark:border-pink-800 dark:bg-white/[0.03] md:p-6">
                   <div className="mb-6 flex h-[52px] w-[52px] items-center justify-center rounded-xl bg-pink-400 text-gray-700 dark:bg-pink-600 dark:text-white">
                     <svg
@@ -32,29 +33,25 @@ export default function HomePage() {
                     </svg>
                   </div>
                   <p className="text-theme-sm text-gray-500 dark:text-white">
-                    {" "}
-                    Avg. Client Rating{" "}
+                    Monthly Income
                   </p>
                   <div className="mt-3 flex items-end justify-between">
                     <div>
                       <h4 className="text-title-sm font-bold text-gray-800 dark:text-white/90">
-                        {" "}
-                        7.8/10{" "}
-                      </h4>{" "}
+                        ₹50,000
+                      </h4> {/* Replace with dynamic value */}
                     </div>
                     <div className="flex items-center gap-1">
-                      {" "}
                       <span className="flex items-center gap-1 rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
-                        {" "}
-                        +20%{" "}
-                      </span>{" "}
+                        +15%
+                      </span>
                       <span className="text-theme-xs text-gray-500 dark:text-white">
-                        {" "}
-                        Vs last month{" "}
-                      </span>{" "}
+                        Vs last month
+                      </span>
                     </div>
                   </div>
                 </div>
+
                 {/* Metric Item End Metric Item Start */}
                 <div className="rounded-2xl border border-pink-200 bg-white p-5 dark:border-pink-800 dark:bg-white/[0.03] md:p-6">
                   <div className="mb-6 flex h-[52px] w-[52px] items-center justify-center rounded-xl bg-pink-400 text-gray-700 dark:bg-pink-600 dark:text-white">
@@ -69,35 +66,29 @@ export default function HomePage() {
                       <path
                         fillRule="evenodd"
                         clipRule="evenodd"
-                        d="M9.13768 5.60156C7.92435 5.60156 6.94074 6.58517 6.94074 7.79851C6.94074 9.01185 7.92435 9.99545 9.13768 9.99545C10.351 9.99545 11.3346 9.01185 11.3346 7.79851C11.3346 6.58517 10.351 5.60156 9.13768 5.60156ZM5.44074 7.79851C5.44074 5.75674 7.09592 4.10156 9.13768 4.10156C11.1795 4.10156 12.8346 5.75674 12.8346 7.79851C12.8346 9.84027 11.1795 11.4955 9.13768 11.4955C7.09592 11.4955 5.44074 9.84027 5.44074 7.79851ZM5.19577 15.3208C4.42094 16.0881 4.03702 17.0608 3.8503 17.8611C3.81709 18.0034 3.85435 18.1175 3.94037 18.2112C4.03486 18.3141 4.19984 18.3987 4.40916 18.3987H13.7582C13.9675 18.3987 14.1325 18.3141 14.227 18.2112C14.313 18.1175 14.3503 18.0034 14.317 17.8611C14.1303 17.0608 13.7464 16.0881 12.9716 15.3208C12.2153 14.572 11.0231 13.955 9.08367 13.955C7.14421 13.955 5.95202 14.572 5.19577 15.3208ZM4.14036 14.2549C5.20488 13.2009 6.78928 12.455 9.08367 12.455C11.3781 12.455 12.9625 13.2009 14.027 14.2549C15.0729 15.2906 15.554 16.5607 15.7778 17.5202C16.0991 18.8971 14.9404 19.8987 13.7582 19.8987H4.40916C3.22695 19.8987 2.06829 18.8971 2.38953 17.5202C2.6134 16.5607 3.09442 15.2906 4.14036 14.2549ZM15.6375 11.4955C14.8034 11.4955 14.0339 11.2193 13.4153 10.7533C13.7074 10.3314 13.9387 9.86419 14.0964 9.36432C14.493 9.75463 15.0371 9.99545 15.6375 9.99545C16.8508 9.99545 17.8344 9.01185 17.8344 7.79851C17.8344 6.58517 16.8508 5.60156 15.6375 5.60156C15.0371 5.60156 14.493 5.84239 14.0964 6.23271C13.9387 5.73284 13.7074 5.26561 13.4153 4.84371C14.0338 4.37777 14.8034 4.10156 15.6375 4.10156C17.6792 4.10156 19.3344 5.75674 19.3344 7.79851C19.3344 9.84027 17.6792 11.4955 15.6375 11.4955ZM20.2581 19.8987H16.7233C17.0347 19.4736 17.2492 18.969 17.3159 18.3987H20.2581C20.4674 18.3987 20.6323 18.3141 20.7268 18.2112C20.8129 18.1175 20.8501 18.0034 20.8169 17.861C20.6302 17.0607 20.2463 16.088 19.4714 15.3208C18.7379 14.5945 17.5942 13.9921 15.7563 13.9566C15.5565 13.6945 15.3328 13.437 15.0824 13.1891C14.8476 12.9566 14.5952 12.7384 14.3249 12.5362C14.7185 12.4831 15.1376 12.4549 15.5835 12.4549C17.8779 12.4549 19.4623 13.2008 20.5269 14.2549C21.5728 15.2906 22.0538 16.5607 22.2777 17.5202C22.5989 18.8971 21.4403 19.8987 20.2581 19.8987Z"
+                        d="M20.3662 1.11216C20.6592 0.8193 21.134 0.819349 21.4269 1.11227C21.7198 1.4052 21.7197 1.88007 21.4268 2.17293L17.0308 6.56803C16.7379 6.8609 16.263 6.86085 15.9701 6.56792C15.6773 6.275 15.6773 5.80013 15.9702 5.50726L20.3662 1.11216ZM16.6592 2.696C16.952 2.40308 16.952 1.9282 16.659 1.63534C16.3661 1.34248 15.8913 1.34253 15.5984 1.63545L14.0987 3.13545C13.8058 3.42837 13.8059 3.90325 14.0988 4.19611C14.3917 4.48897 14.8666 4.48892 15.1595 4.196L16.6592 2.696ZM11.8343 3.45488C11.7079 3.19888 11.4472 3.0368 11.1617 3.0368C10.8762 3.0368 10.6155 3.19888 10.4892 3.45488L8.06431 8.36817L2.64217 9.15605C2.35966 9.19711 2.12495 9.39499 2.03673 9.6665C1.94851 9.93801 2.02208 10.2361 2.22651 10.4353L6.15001 14.2598L5.2238 19.66C5.17554 19.9414 5.29121 20.2258 5.52216 20.3936C5.75312 20.5614 6.05932 20.5835 6.31201 20.4506L11.1617 17.901L16.0114 20.4506C16.2641 20.5835 16.5703 20.5614 16.8013 20.3936C17.0322 20.2258 17.1479 19.9414 17.0996 19.66L16.1734 14.2598L20.0969 10.4353C20.3014 10.2361 20.3749 9.93801 20.2867 9.6665C20.1985 9.39499 19.9638 9.19711 19.6813 9.15605L14.2591 8.36817L11.8343 3.45488ZM9.23491 9.3856L11.1617 5.48147L13.0885 9.3856C13.1978 9.60696 13.4089 9.76039 13.6532 9.79588L17.9617 10.4219L14.8441 13.4609C14.6673 13.6332 14.5866 13.8814 14.6284 14.1247L15.3643 18.4158L11.5107 16.3898C11.2922 16.275 11.0312 16.275 10.8127 16.3898L6.9591 18.4158L7.69508 14.1247C7.7368 13.8814 7.65614 13.6332 7.47938 13.4609L4.36174 10.4219L8.67021 9.79588C8.91449 9.76039 9.12567 9.60696 9.23491 9.3856ZM21.6514 5.12825C21.9443 5.42111 21.9444 5.89598 21.6515 6.18891L20.1518 7.68891C19.8589 7.98183 19.3841 7.98188 19.0912 7.68901C18.7982 7.39615 18.7982 6.92128 19.091 6.62836L20.5907 5.12836C20.8836 4.83543 21.3585 4.83538 21.6514 5.12825Z"
                         fill=""
                       />
                     </svg>
                   </div>
-                  <p className="text-theme-sm text-gray-500 dark:text-white">
-                    {" "}
-                    Instagram Followers{" "}
-                  </p>
+                  <p className="text-theme-sm text-gray-500 dark:text-white"> Monthly Expenses </p>
                   <div className="mt-3 flex items-end justify-between">
                     <div>
                       <h4 className="text-title-sm font-bold text-gray-800 dark:text-white/90">
-                        {" "}
-                        5,934{" "}
-                      </h4>{" "}
+                        ₹ 20,500
+                      </h4>
                     </div>
                     <div className="flex items-center gap-1">
-                      {" "}
-                      <span className="flex items-center gap-1 rounded-full bg-error-50 px-2 py-0.5 text-theme-xs font-medium text-error-600 dark:bg-error-500/15 dark:text-error-500">
-                        {" "}
-                        -3.59%{" "}
-                      </span>{" "}
+                      <span className="flex items-center gap-1 rounded-full bg-success-50 px-2 py-0.5 text-theme-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
+                        +5.75%
+                      </span>
                       <span className="text-theme-xs text-gray-500 dark:text-white">
-                        {" "}
-                        Vs last month{" "}
-                      </span>{" "}
+                        Vs last month
+                      </span>
                     </div>
                   </div>
                 </div>
+
                 {/* Metric Item End Metric Item Start */}
                 <div className="rounded-2xl border border-pink-200 bg-white p-5 dark:border-pink-800 dark:bg-white/[0.03] md:p-6">
                   <div className="mb-6 flex h-[52px] w-[52px] items-center justify-center rounded-xl bg-pink-400 text-gray-700 dark:bg-pink-600 dark:text-white">
@@ -118,7 +109,7 @@ export default function HomePage() {
                     </svg>
                   </div>
                   <p className="text-theme-sm text-gray-500 dark:text-white">
-                    Total Revenue
+                    Monthly Savings
                   </p>
                   <div className="mt-3 flex items-end justify-between">
                     <div>
@@ -140,6 +131,50 @@ export default function HomePage() {
                     </div>
                   </div>
                 </div>
+                <div className="rounded-2xl border border-blue-200 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 p-5 dark:border-blue-800 dark:bg-white/[0.03] md:p-6">
+                  {/* Card Icon */}
+                  <div className="mb-6 flex h-[52px] w-[52px] items-center justify-center rounded-xl bg-white text-gray-700 dark:bg-indigo-600 dark:text-white">
+                    {/* Example: Visa Logo, replace with relevant SVG or Icon */}
+                    <svg
+                      className="fill-current"
+                      width={24}
+                      height={24}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M2 7C2 5.89543 2.89543 5 4 5H20C21.1046 5 22 5.89543 22 7V17C22 18.1046 21.1046 19 20 19H4C2.89543 19 2 18.1046 2 17V7ZM4 7V8H20V7H4ZM4 10V17H20V10H4ZM6 12H8V14H6V12ZM10 12H12V14H10V12Z"
+                        fill=""
+                      />
+                    </svg>
+                  </div>
+
+                  {/* Bank Name */}
+                  <h4 className="text-title-sm font-semibold text-white">HDFC Bank</h4>
+
+                  {/* Card Balance and Masked Number */}
+                  <div className="mt-3">
+                    <p className="text-xl font-bold text-white">Balance: ₹XX,XXX</p>
+                    <p className="text-sm text-white/90">Card Number: 4321 **** 1234</p>
+                  </div>
+
+                  {/* Extra Info or Status */}
+                  <div className="mt-3 flex items-end justify-between">
+                    <div>
+                      <p className="text-sm text-white/90">Debit/Credit Cards Linked</p>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="flex items-center gap-1 rounded-full bg-success-50 px-2 py-0.5 text-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-500">
+                        +1
+                      </span>
+                      <span className="text-xs text-white/90">Since last month</span>
+                    </div>
+                  </div>
+                </div>
+
+
+
                 {/* Metric Item End */}
               </div>
               {/* Metric Group Three */}
@@ -186,16 +221,16 @@ export default function HomePage() {
                       className="apexcharts-canvas apexchartszv5d3q5e apexcharts-theme-"
                       style={{ width: 739, height: 310 }}
                     >
-<svg
-  id="SvgjsSvg1006"
-  width={739}
-  height={310}
-  xmlns="http://www.w3.org/2000/svg"
-  version="1.1"
-  xmlnsXlink="http://www.w3.org/1999/xlink"
-  className="apexcharts-svg apexcharts-zoomable hovering-zoom"
-  transform="translate(0, 0)"
->
+                      <svg
+                        id="SvgjsSvg1006"
+                        width={739}
+                        height={310}
+                        xmlns="http://www.w3.org/2000/svg"
+                        version="1.1"
+                        xmlnsXlink="http://www.w3.org/1999/xlink"
+                        className="apexcharts-svg apexcharts-zoomable hovering-zoom"
+                        transform="translate(0, 0)"
+                      >
 
                         <foreignObject x={0} y={0} width={739} height={310}>
                           <div
@@ -573,14 +608,14 @@ export default function HomePage() {
                             className="apexcharts-area-series apexcharts-plot-series"
                           >
                             <g
-  id="SvgjsG1019"
-  className="apexcharts-series"
-  zindex={0}
-  seriesname="Sales"
-  data-longestseries="true"
-  rel={1}
-  data-realindex={0}
->
+                              id="SvgjsG1019"
+                              className="apexcharts-series"
+                              zindex={0}
+                              seriesname="Sales"
+                              data-longestseries="true"
+                              rel={1}
+                              data-realindex={0}
+                            >
 
                               <path
                                 id="SvgjsPath1026"
@@ -1353,18 +1388,16 @@ export default function HomePage() {
                           className="apexcharts-canvas apexcharts0glka4xp apexcharts-theme-"
                           style={{ width: 150, height: 70 }}
                         >
-<svg
-  id="SvgjsSvg1116"
-  width={150}
-  height={70}
-  xmlns="http://www.w3.org/2000/svg"
-  version="1.1"
-  xmlnsXlink="http://www.w3.org/1999/xlink"
-  xmlnsSvgjs="http://svgjs.dev"
-  className="apexcharts-svg apexcharts-zoomable"
-  xmlnsData="ApexChartsNS"
-  transform="translate(0, 0)"
->
+                          <svg
+                            id="SvgjsSvg1116"
+                            width={150}
+                            height={70}
+                            xmlns="http://www.w3.org/2000/svg"
+                            version="1.1"
+                            xmlnsXlink="http://www.w3.org/1999/xlink"
+                            className="apexcharts-svg apexcharts-zoomable"
+                            transform="translate(0, 0)"
+                          >
                             <foreignObject x={0} y={0} width={150} height={70}>
                               <div
                                 xmlns="http://www.w3.org/1999/xhtml"

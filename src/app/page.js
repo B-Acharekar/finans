@@ -1,12 +1,12 @@
 // app/page.jsx or app/page.tsx
 
-import Header from "../components/Header";
-import Footer from "@/components/footer";
+import LandingHeader from "../components/header/LandingHeader";
+import Footer from "@/components/footer/LandingFooter";
 
 export default function HomePage() {
   return (
     <main>
-      <Header />
+      <LandingHeader />
       {/* Rest of your landing page content */}
       <section>
         {/* BEGIN HERO SECTION */}

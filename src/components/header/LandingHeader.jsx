@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
-const Header = () => {
+const LandingHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -27,7 +27,7 @@ const Header = () => {
 
         {/* CTA buttons (desktop only) */}
         <div className="hidden md:flex md:items-end md:relative ml-6">
-          <Link href="#_" className="px-3 py-2 mr-3 text-sm font-bold text-pink-500">Login</Link>
+          <Link href="/login" className="px-3 py-2 mr-3 text-sm font-bold text-pink-500">Login</Link>
           <Link href="/signup" className="px-5 py-3 text-sm font-bold text-white bg-pink-600 rounded hover:shadow-xl transition-all">Get Started</Link>
         </div>
 
@@ -59,4 +59,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default LandingHeader;
