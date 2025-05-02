@@ -17,7 +17,6 @@ export default function BankForm() {
   const [otpSent, setOtpSent] = useState(false);
   const [sendingOtp, setSendingOtp] = useState(false);
   const [error, setError] = useState("");
-  const { setAccountNumber: setAccountNumberContext } = useAccount();  // Access context
 
 
   const NEXT_PUBLIC_API_URL = "http://127.0.0.1:5000";
@@ -83,6 +82,7 @@ export default function BankForm() {
 
       const data = await response.json();
       if (response.ok) {
+        console.log(data);
         console.log(accountNumber);
         localStorage.setItem('accountNumber', accountNumber);
         router.push(`/dashboard`);

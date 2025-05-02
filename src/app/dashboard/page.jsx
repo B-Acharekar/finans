@@ -37,9 +37,9 @@ export default function HomePage() {
           <div className="grid grid-cols-12 gap-4 md:gap-6">
             <div className="col-span-12">
 
-            {accountNumber ? <DashboardMetrics /> : <LinkBtn />}  {/* Conditional rendering */}
+            {accountNumber ? <DashboardMetrics accountNumber={accountNumber} /> : <LinkBtn />}  {/* Conditional rendering */}
             </div>
-            <div className="col-span-12 space-y-6 xl:col-span-8">
+            <div className="col-span-12 space-y-6 xl:col-span-8 mt-2">
               {/* Chart Eight Start */}
               <div className="rounded-2xl border border-pink-200 bg-white px-5 pb-5 pt-5 dark:border-pink-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
                 <div className="flex flex-col gap-4 mb-6 sm:flex-row sm:items-center sm:justify-between">
@@ -1206,7 +1206,7 @@ export default function HomePage() {
               </div>
               {/* ====== Table Three End */}
             </div>
-            <div className="col-span-12 space-y-6 xl:col-span-4">
+            <div className="col-span-12 space-y-6 xl:col-span-4 mt-2">
               {/* ====== Traffic Stats Start */}
               <div className="rounded-2xl border border-pink-200 bg-white px-5 pb-1 pt-5 dark:border-pink-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
                 <div className="mb-6 flex items-center justify-between gap-2">
