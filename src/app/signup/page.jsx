@@ -1,159 +1,167 @@
 "use client";
-import { signup } from "@/lib/auth"; // adjust path if needed
+
+import { signup } from "@/lib/auth";
 import { useState } from "react";
-import "./signup.css"; // Make sure this file exists or remove if unnecessary
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { User, Mail, Lock, ArrowRight, Chrome, Github, CheckCircle2 } from "lucide-react";
 
 export default function SignupPage() {
-  const [name, setName] = useState(""); // Added
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); // Added
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
-  // Inside your SignupPage component
   const handleSignup = async (e) => {
     e.preventDefault();
-  
+    setError("");
+    
     if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+      setError("Passwords do not match!");
       return;
     }
-  
+
+    setIsLoading(true);
     try {
-      const user = await signup(email, password, name);
-      console.log("Signup successful:", user);
-  
-      // ✨ Show verification success message
-      alert("Signup successful! A verification email has been sent. Please verify your email before logging in.");
-  
-      // ✨ Optional: Redirect to login page
-      window.location.href = "/login";
-  
+      await signup(email, password, name);
+      router.push("/login?message=Account created! Please verify your email.");
     } catch (error) {
-      console.error("Error signing up:", error);
-      alert(error.message);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
-  
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black-100 dark:bg-black-700 py-4 px-4 sm:px-6 lg:px-8">
-      <div className="flex w-full max-w-4xl overflow-hidden bg-white rounded-2xl shadow-xl dark:bg-gray-800">
-        <div
-          className="hidden bg-cover lg:block lg:w-1/2"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1606660265514-358ebbadc80d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1575&q=80')",
-          }}
-        ></div>
+    <div className="min-h-screen grid lg:grid-cols-2 bg-[#020617]">
+      {/* Left: Visual Side (Same as Login for consistency) */}
+      <div className="hidden lg:flex relative overflow-hidden bg-gradient-to-br from-indigo-600 to-pink-700 items-center justify-center p-12 order-last">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1621416894569-0f39ed31d247?auto=format&fit=crop&q=80')] bg-cover opacity-20 mix-blend-overlay" />
+        
+        <div className="relative z-10 max-w-lg space-y-8">
+            <h2 className="text-6xl font-black text-white tracking-tighter leading-none">
+                Build your <br/>
+                <span className="text-pink-300">Financial</span> Legacy.
+            </h2>
+            
+            <div className="space-y-4">
+                {[
+                    "Zero commission trading",
+                    "AI-powered spending insights",
+                    "World-class security encryption",
+                    "Global multi-currency support"
+                ].map(text => (
+                    <div key={text} className="flex items-center gap-3 text-pink-100 font-bold">
+                        <CheckCircle2 size={20} className="text-pink-400" />
+                        {text}
+                    </div>
+                ))}
+            </div>
+        </div>
 
-        <div className="w-full px-8 py-6 md:px-10 lg:w-1/2">
-          <div className="flex justify-center mx-auto">
-            <img
-              className="w-auto h-16 sm:h-20 md:h-22 lg:h-28"
-              src="/Logo.svg"
-              alt="Finans Logo"
-            />
+        {/* Decorative Blurs */}
+        <div className="absolute -top-20 -right-20 w-80 h-80 bg-white/10 rounded-full blur-[100px]" />
+        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-pink-500/20 rounded-full blur-[100px]" />
+      </div>
+
+      {/* Right: Form Side */}
+      <div className="flex items-center justify-center p-8 bg-slate-950">
+        <div className="w-full max-w-md space-y-8">
+          <div className="text-center lg:text-left">
+            <h2 className="text-4xl font-black text-white tracking-tight mb-2">Create Account</h2>
+            <p className="text-slate-400 font-medium">Join 500,000+ users mastering their money.</p>
           </div>
 
-          <h2 className="mt-6 text-2xl font-bold text-center text-gray-700 dark:text-gray-200">
-            Create your account
-          </h2>
-
-          <p className="mt-2 text-sm text-center text-gray-500 dark:text-gray-400">
-            Sign up to get started
-          </p>
-
-          <div className="mt-6">
-            <a
-              href="#"
-              className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 transition-all"
-            >
-              <svg className="w-5 h-5 mr-2" viewBox="0 0 40 40">
-                {/* SVG Paths */}
-              </svg>
-              Sign up with Google
-            </a>
+          <div className="grid grid-cols-2 gap-4">
+            <button className="flex items-center justify-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm hover:bg-white/10 transition-all">
+                <Chrome size={18} /> Google
+            </button>
+            <button className="flex items-center justify-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white font-bold text-sm hover:bg-white/10 transition-all">
+                <Github size={18} /> Github
+            </button>
           </div>
 
-          <div className="flex items-center justify-between mt-6">
-            <span className="w-1/5 border-b dark:border-gray-600"></span>
-            <span className="text-xs text-gray-400 uppercase">or</span>
-            <span className="w-1/5 border-b dark:border-gray-600"></span>
-          </div>
-
-          <form onSubmit={handleSignup} className="mt-6 space-y-5">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                Full Name
-              </label>
-              <input
-                id="name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="w-full px-4 py-3 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 dark:focus:border-pink-400 focus:outline-none"
-              />
+          <form onSubmit={handleSignup} className="space-y-5">
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Full Name</label>
+              <div className="relative group">
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-pink-500 transition-colors" size={18} />
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="John Doe"
+                  required
+                  className="w-full bg-slate-900 border border-white/5 rounded-2xl pl-12 pr-4 py-4 text-white focus:ring-2 focus:ring-pink-500/50 outline-none transition-all"
+                />
+              </div>
             </div>
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full px-4 py-3 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 dark:focus:border-pink-400 focus:outline-none"
-              />
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Email Address</label>
+              <div className="relative group">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-pink-500 transition-colors" size={18} />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="name@example.com"
+                  required
+                  className="w-full bg-slate-900 border border-white/5 rounded-2xl pl-12 pr-4 py-4 text-white focus:ring-2 focus:ring-pink-500/50 outline-none transition-all"
+                />
+              </div>
             </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full px-4 py-3 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 dark:focus:border-pink-400 focus:outline-none"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-200">
-                Confirm Password
-              </label>
-              <input
-                id="confirmPassword"
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                className="w-full px-4 py-3 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 dark:focus:border-pink-400 focus:outline-none"
-              />
+            <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Password</label>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="••••••••"
+                        required
+                        className="w-full bg-slate-900 border border-white/5 rounded-2xl px-4 py-4 text-white focus:ring-2 focus:ring-pink-500/50 outline-none transition-all"
+                    />
+                </div>
+                <div className="space-y-1">
+                    <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Confirm</label>
+                    <input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="••••••••"
+                        required
+                        className="w-full bg-slate-900 border border-white/5 rounded-2xl px-4 py-4 text-white focus:ring-2 focus:ring-pink-500/50 outline-none transition-all"
+                    />
+                </div>
             </div>
 
             <button
               type="submit"
-              className="w-full px-4 py-3 text-sm font-semibold text-white bg-pink-600 rounded-lg hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-300 transition-all"
+              disabled={isLoading}
+              className="w-full py-4 bg-pink-600 hover:bg-pink-500 text-white rounded-2xl font-black text-lg flex items-center justify-center gap-2 transition-all shadow-xl shadow-pink-600/20 active:scale-95 disabled:opacity-50"
             >
-              Sign Up
+              {isLoading ? "Creating Account..." : "Create Account"} <ArrowRight size={20} />
             </button>
           </form>
 
-          <p className="mt-6 text-xs text-center text-gray-400">
-            Already have an account?
-            <a href="/login" className="ml-1 text-pink-500 hover:underline">
-              Sign in
-            </a>
+          {error && (
+            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-500 text-sm font-bold text-center">
+                {error}
+            </div>
+          )}
+
+          <p className="text-center text-slate-400 font-medium">
+            Already have an account? 
+            <Link href="/login" className="text-pink-500 font-black ml-2 hover:underline">Sign In</Link>
           </p>
         </div>
       </div>
     </div>
   );
 }
+

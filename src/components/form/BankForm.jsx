@@ -1,15 +1,14 @@
 "use client";
 
-
-import React, { useEffect, useState } from 'react';  // Make sure useEffect is imported
+import React, { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
-
-
 import Select from "react-select";
+import { Landmark, ArrowRight, ShieldCheck, Mail, KeyRound, CheckCircle2, ChevronLeft } from "lucide-react";
 
 export default function BankForm() {
   const [isClient, setIsClient] = useState(false);
-  const [bankId, setBankId] = useState(""); // Set initial bankId to empty
+  const [step, setStep] = useState(1);
+  const [bankId, setBankId] = useState("");
   const [accountType, setAccountType] = useState("savings");
   const [accountNumber, setLocalAccountNumber] = useState("");
   const [email, setEmail] = useState("");
@@ -18,17 +17,14 @@ export default function BankForm() {
   const [sendingOtp, setSendingOtp] = useState(false);
   const [error, setError] = useState("");
 
-
   const NEXT_PUBLIC_API_URL = "http://127.0.0.1:5000";
   const router = useRouter();
 
   useEffect(() => {
-    setIsClient(true); // Set to true once the component mounts on the client
+    setIsClient(true);
   }, []);
 
-  if (!isClient) {
-    return null; // Avoid rendering anything until after the client is mounted
-  }
+  if (!isClient) return null;
 
   const handleSendOtp = async () => {
     setError("");
@@ -41,16 +37,15 @@ export default function BankForm() {
       setSendingOtp(true);
       const res = await fetch(`${NEXT_PUBLIC_API_URL}/api/accounts/send-otp`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
 
-      const data = await res.json();
       if (res.ok) {
         setOtpSent(true);
+        setStep(3);
       } else {
+        const data = await res.json();
         setError(data.error || "Failed to send OTP");
       }
     } catch (err) {
@@ -61,16 +56,13 @@ export default function BankForm() {
   };
 
   const handleSubmit = async (e) => {
-    // setAccountNumber(setLocalAccountNumber); 
     e.preventDefault();
     setError("");
 
     try {
       const response = await fetch(`${NEXT_PUBLIC_API_URL}/api/accounts/link`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           bank_id: bankId,
           account_type: accountType,
@@ -82,8 +74,6 @@ export default function BankForm() {
 
       const data = await response.json();
       if (response.ok) {
-        console.log(data);
-        console.log(accountNumber);
         localStorage.setItem('accountNumber', accountNumber);
         router.push(`/dashboard`);
       } else {
@@ -94,198 +84,181 @@ export default function BankForm() {
     }
   };
 
-  // Handle bank selection change
-  const handleBankChange = (e) => {
-    setBankId(e.target.value); // Update bankId state with the selected bank
-  };
-
   const banks = [
-    {
-      _id: "axis",
-      name: "Axis Bank",
-      bank_code: "AXIS001",
-      logo_url: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Axis_Bank_logo.svg",
-    },
-    {
-      _id: "kotak",
-      name: "Kotak Mahindra Bank",
-      bank_code: "KOTAK001",
-      logo_url: "https://upload.wikimedia.org/wikipedia/en/3/39/Kotak_Mahindra_Group_logo.svg",
-    },
-    {
-      _id: "bob",
-      name: "Bank of Baroda",
-      bank_code: "BOB001",
-      logo_url: "https://upload.wikimedia.org/wikipedia/en/f/f2/BankOfBarodaLogo.svg",
-    },
-    {
-      _id: "pnb",
-      name: "Punjab National Bank",
-      bank_code: "PNB001",
-      logo_url: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Punjab_National_Bank_new_logo.svg",
-    },
-    {
-      _id: "yesbank",
-      name: "YES Bank",
-      bank_code: "YES001",
-      logo_url: "https://upload.wikimedia.org/wikipedia/commons/4/4f/Yes_Bank_SVG_Logo.svg",
-    },
-    {
-      _id: "indusind",
-      name: "IndusInd Bank",
-      bank_code: "INDUS001",
-      logo_url: "https://upload.wikimedia.org/wikipedia/commons/4/40/IndusInd_Bank_SVG_Logo.svg",
-    },
-    {
-      _id: "canara",
-      name: "Canara Bank",
-      bank_code: "CANARA001",
-      logo_url: "https://upload.wikimedia.org/wikipedia/commons/5/50/Canara_Bank_Logo.svg",
-    },
+    { _id: "axis", name: "Axis Bank", logo: "https://upload.wikimedia.org/wikipedia/commons/1/1a/Axis_Bank_logo.svg" },
+    { _id: "kotak", name: "Kotak Mahindra", logo: "https://upload.wikimedia.org/wikipedia/en/3/39/Kotak_Mahindra_Group_logo.svg" },
+    { _id: "bob", name: "Bank of Baroda", logo: "https://upload.wikimedia.org/wikipedia/en/f/f2/BankOfBarodaLogo.svg" },
+    { _id: "hdfc", name: "HDFC Bank", logo: "https://upload.wikimedia.org/wikipedia/commons/4/48/HDFC_Bank_Logo.svg" },
+    { _id: "icici", name: "ICICI Bank", logo: "https://upload.wikimedia.org/wikipedia/commons/1/12/ICICI_Bank_Logo.svg" },
   ];
+
   const customStyles = {
     control: (base, state) => ({
       ...base,
-      backgroundColor: "#1f2937", // bg-gray-800
-      borderColor: state.isFocused ? "#ec4899" : "#d1d5db", // pink-500 or gray-300
-      boxShadow: state.isFocused ? "0 0 0 2px rgba(236, 72, 153, 0.3)" : "none",
-      borderRadius: "0.5rem", // rounded-lg
-      color: "#d1d5db", 
-      fontSize: "0.875rem", // text-sm
-      padding: "0.25rem 0.5rem", // px-2 py-1
-    }),
-    singleValue: (base) => ({
-      ...base,
-      display: "flex",
-      alignItems: "center",
-      gap: "0.5rem",
-      color: "#d1d5db",
-    }),
-    option: (base, { isFocused }) => ({
-      ...base,
-      backgroundColor: isFocused ? "#fce7f3" : "#ffffff", // pink-100 hover
-      color: "#111827",
-      display: "flex",
-      alignItems: "center",
-      gap: "0.5rem",
-      padding: "0.5rem"
+      backgroundColor: "transparent",
+      borderColor: state.isFocused ? "#db2777" : "rgba(236, 72, 153, 0.2)",
+      boxShadow: "none",
+      borderRadius: "1rem",
+      padding: "0.5rem",
+      color: "white",
     }),
     menu: (base) => ({
       ...base,
-      backgroundColor: "#ffffff",
-      borderRadius: "0.5rem",
-      boxShadow: "0 4px 6px rgba(0,0,0,0.1)"
+      backgroundColor: "#1e293b",
+      borderRadius: "1rem",
+      overflow: "hidden",
     }),
+    option: (base, { isFocused }) => ({
+      ...base,
+      backgroundColor: isFocused ? "rgba(219, 39, 119, 0.1)" : "transparent",
+      color: "white",
+      padding: "0.75rem",
+      cursor: "pointer",
+    }),
+    singleValue: (base) => ({ ...base, color: "white" }),
   };
-  const bankOptions = banks.map((bank) => ({
-    value: bank._id,
-    label: bank.name,
-    logo: bank.logo_url
-  }));
-  const formatOptionLabel = ({ label, logo }) => (
-    <div className="flex items-center gap-2">
-      <img src={logo} alt={label} className="h-5 w-5 rounded-sm" />
-      <span>{label}</span>
-    </div>
-  );
-
-
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black-100 dark:bg-black-700 py-4 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl dark:bg-gray-800 p-8">
-        <h2 className="text-2xl font-bold text-center text-gray-700 dark:text-gray-200">Link Bank Account</h2>
-
-        <form onSubmit={handleSubmit} className="space-y-4 mt-6">
-          {/* Bank Selection */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Select Bank</label>
-            <Select
-              options={bankOptions}
-              onChange={(selectedOption) => setBankId(selectedOption.value)}
-              styles={customStyles}
-              formatOptionLabel={formatOptionLabel}
-              className="text-white bg-gray-800 border dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 focus:outline-none"
-            />
-
+    <div className="space-y-8 animate-in fade-in duration-500">
+      {/* Progress Stepper */}
+      <div className="flex items-center justify-center gap-4 mb-12">
+        {[1, 2, 3].map((s) => (
+          <div key={s} className="flex items-center gap-4">
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${
+              step >= s ? "bg-pink-600 text-white shadow-lg shadow-pink-600/20" : "bg-slate-800 text-slate-500"
+            }`}>
+              {step > s ? <CheckCircle2 size={20} /> : s}
+            </div>
+            {s < 3 && <div className={`w-12 h-1 bg-slate-800 rounded-full ${step > s ? "bg-pink-600" : ""}`} />}
           </div>
+        ))}
+      </div>
 
-          {/* Account Type */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Account Type</label>
-            <select
-              className="w-full px-4 py-3 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 focus:outline-none"
-              onChange={(e) => setAccountType(e.target.value)}
-              value={accountType}
-              required
+      {step === 1 && (
+        <div className="space-y-6 animate-in slide-in-from-right-4 duration-500">
+          <div className="text-center">
+            <Landmark className="mx-auto text-pink-500 mb-4" size={48} />
+            <h3 className="text-xl font-bold">Select Your Bank</h3>
+            <p className="text-slate-400 text-sm">Choose from our supported partners</p>
+          </div>
+          <Select
+            options={banks.map(b => ({ value: b._id, label: b.name, logo: b.logo }))}
+            styles={customStyles}
+            onChange={(opt) => { setBankId(opt.value); setStep(2); }}
+            formatOptionLabel={({ label, logo }) => (
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-white p-1 flex items-center justify-center">
+                  <img src={logo} alt={label} className="max-h-full" />
+                </div>
+                <span>{label}</span>
+              </div>
+            )}
+          />
+        </div>
+      )}
+
+      {step === 2 && (
+        <div className="space-y-6 animate-in slide-in-from-right-4 duration-500">
+          <button onClick={() => setStep(1)} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors text-sm">
+            <ChevronLeft size={16} /> Back
+          </button>
+          <div className="text-center">
+            <ShieldCheck className="mx-auto text-pink-500 mb-4" size={48} />
+            <h3 className="text-xl font-bold">Account Details</h3>
+            <p className="text-slate-400 text-sm">We need this to securely identify your account</p>
+          </div>
+          
+          <div className="space-y-4">
+            <div>
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Account Type</label>
+              <div className="grid grid-cols-2 gap-4 mt-2">
+                {["savings", "current"].map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => setAccountType(t)}
+                    className={`py-3 rounded-2xl font-bold capitalize transition-all ${
+                      accountType === t ? "bg-pink-600 border-pink-500" : "bg-slate-900 border-slate-800 text-slate-500"
+                    } border`}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Account Number</label>
+              <input
+                type="text"
+                value={accountNumber}
+                onChange={(e) => setLocalAccountNumber(e.target.value)}
+                placeholder="Enter 12-16 digit number"
+                className="w-full mt-2 bg-slate-900 border border-slate-800 rounded-2xl px-4 py-3 focus:ring-2 focus:ring-pink-500 outline-none transition-all"
+              />
+            </div>
+
+            <div>
+              <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Email Address</label>
+              <div className="relative mt-2">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your@email.com"
+                  className="w-full bg-slate-900 border border-slate-800 rounded-2xl pl-12 pr-4 py-3 focus:ring-2 focus:ring-pink-500 outline-none transition-all"
+                />
+              </div>
+            </div>
+
+            <button
+              onClick={handleSendOtp}
+              disabled={sendingOtp || !accountNumber || !email}
+              className="w-full py-4 bg-pink-600 hover:bg-pink-500 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-2xl font-black text-lg flex items-center justify-center gap-2 transition-all mt-4"
             >
-              <option value="savings">Savings</option>
-              <option value="current">Current</option>
-            </select>
+              {sendingOtp ? "Syncing..." : "Verify Identity"} <ArrowRight size={20} />
+            </button>
           </div>
+        </div>
+      )}
 
-          {/* Account Number */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Account Number</label>
+      {step === 3 && (
+        <div className="space-y-6 animate-in slide-in-from-right-4 duration-500 text-center">
+          <div className="w-20 h-20 bg-pink-600/20 rounded-3xl flex items-center justify-center text-pink-500 mx-auto mb-6">
+            <KeyRound size={40} />
+          </div>
+          <h3 className="text-2xl font-black">Final Verification</h3>
+          <p className="text-slate-400">We've sent a 6-digit code to <br/><span className="text-white font-bold">{email}</span></p>
+          
+          <div className="max-w-[280px] mx-auto space-y-6">
             <input
               type="text"
-              value={accountNumber}
-              onChange={(e) => setLocalAccountNumber(e.target.value)}
-              required
-              className="w-full px-4 py-3 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 focus:outline-none"
-            />
-          </div>
-
-          {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-4 py-3 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 focus:outline-none"
-            />
-          </div>
-
-          {/* OTP */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">OTP</label>
-            <input
-              type="text"
+              maxLength={6}
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
-              required
-              className="w-full px-4 py-3 mt-2 text-gray-700 bg-white border rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-pink-500 focus:ring-2 focus:ring-pink-200 focus:outline-none"
+              placeholder="0 0 0 0 0 0"
+              className="w-full bg-slate-900 border-2 border-slate-800 focus:border-pink-500 rounded-2xl px-4 py-4 text-3xl font-black text-center tracking-[0.5rem] outline-none transition-all"
             />
-          </div>
-
-          {/* Send OTP Button */}
-          <div className="mt-2 flex items-center gap-4">
+            
             <button
-              type="button"
-              onClick={handleSendOtp}
-              disabled={sendingOtp}
-              className="px-4 py-2 text-sm font-semibold bg-blue-600 text-white rounded-lg hover:bg-blue-500 transition-all"
+              onClick={handleSubmit}
+              className="w-full py-4 bg-pink-600 hover:bg-pink-500 text-white rounded-2xl font-black text-lg shadow-xl shadow-pink-600/20 active:scale-95 transition-all"
             >
-              {sendingOtp ? "Sending OTP..." : "Send OTP"}
+              Complete Link
             </button>
-            {otpSent && <span className="text-green-500 text-sm">OTP sent!</span>}
+            <button onClick={() => setStep(2)} className="text-sm font-bold text-slate-500 hover:text-pink-500 transition-colors">
+              I didn't receive a code
+            </button>
           </div>
+        </div>
+      )}
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={!otpSent}
-            className={`w-full px-4 py-3 text-sm font-semibold text-white rounded-lg transition-all ${otpSent ? "bg-pink-600 hover:bg-pink-500" : "bg-gray-400 cursor-not-allowed"
-              }`}
-          >
-            Link Account
-          </button>
-        </form>
-
-        {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
-      </div>
+      {error && (
+        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-500 text-sm font-bold text-center">
+          {error}
+        </div>
+      )}
     </div>
   );
 }
+

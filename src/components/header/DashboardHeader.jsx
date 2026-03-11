@@ -1,113 +1,163 @@
 "use client";
+
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { Bell, Search, User, LogOut, Settings, Menu, X, ChevronDown } from "lucide-react";
 
 const DashboardHeader = () => {
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null); // Create a ref to the dropdown for dynamic positioning
-  const userProfileRef = useRef(null); // Ref to profile icon for positioning the dropdown
+  const pathname = usePathname();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const profileRef = useRef(null);
 
   const handleLogout = () => {
-    // Logic to log out user
-    router.push('/login'); // Redirect to login page
+    router.push('/login');
   };
 
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
-
-  // Adjust dropdown position based on screen height (only for desktop)
   useEffect(() => {
-    // Check if the screen is large enough (desktop) before adjusting the dropdown position
-    if (window.innerWidth >= 768 && dropdownOpen && dropdownRef.current && userProfileRef.current) {
-      const dropdownHeight = dropdownRef.current.offsetHeight;
-      const profileHeight = userProfileRef.current.offsetHeight;
-      const viewportHeight = window.innerHeight;
-
-      // Adjust the dropdown position if it exceeds the viewport
-      if (window.scrollY + viewportHeight < dropdownHeight + profileHeight) {
-        dropdownRef.current.style.top = `-${dropdownHeight + 10}px`; // Position above
-      } else {
-        dropdownRef.current.style.top = `${profileHeight + 10}px`; // Position below
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setIsProfileOpen(false);
       }
-    }
-  }, [dropdownOpen]); // Run this effect whenever dropdownOpen changes
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const navItems = [
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "Transactions", href: "/transactions" },
+    { name: "Budget", href: "/budget" },
+    { name: "Support", href: "/support" },
+  ];
 
   return (
-    <header className="relative z-50 w-full h-24 bg-black">
-      <div className="container flex items-center justify-between h-full px-8 mx-auto sm:px-0 md:px-4 lg:px-8">
-
-        {/* Logo */}
-        <Link href="/dashboard" className="relative flex items-center h-full font-black leading-none">
-          <img src="/Logo.svg" alt="Finans Logo" className="h-12 w-auto" />
-          <span className="ml-3 text-xl text-pink-500">Finans<span className="text-white">.</span></span>
-        </Link>
-
-        {/* Desktop Menu */}
-        <nav className="hidden md:flex md:flex-row md:items-center lg:text-base">
-          {["Dashboard", "Transactions", "Income Tracker", "Budget"].map((item) => (
-            <Link key={item} href={`/${item.toLowerCase().replace(/\s+/g, '')}`} className="ml-12 font-bold duration-100 hover:text-pink-600">
-              {item}
+    <header className="sticky top-0 z-50 w-full border-b border-pink-100 bg-white/80 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/80">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          
+          {/* Logo */}
+          <div className="flex items-center gap-8">
+            <Link href="/dashboard" className="flex items-center gap-2 group">
+              <div className="p-2 bg-pink-600 rounded-xl transition-transform group-hover:rotate-12">
+                <div className="w-4 h-4 border-2 border-white rounded-sm rotate-45" />
+              </div>
+              <span className="text-xl font-black bg-gradient-to-r from-pink-600 to-indigo-600 bg-clip-text text-transparent">
+                Finans
+              </span>
             </Link>
-          ))}
-        </nav>
 
-        {/* User Profile and Dropdown (Desktop only) */}
-        <div className="hidden md:flex md:items-center ml-6 relative">
-          <div className="flex items-center space-x-3 cursor-pointer" onClick={toggleDropdown} ref={userProfileRef}>
-            <img src="/profile-pic.png" alt="User Profile" className="w-12 h-12 rounded-full border-2 border-pink-500" />
-            <span className="text-white font-medium">John Doe</span>
+            {/* Desktop Nav */}
+            <nav className="hidden md:flex items-center gap-1">
+              {navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                    pathname === item.href
+                      ? "bg-pink-50 text-pink-600 dark:bg-pink-900/20"
+                      : "text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-slate-800"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
           </div>
 
-          {/* Dropdown Menu (Desktop Only) */}
-          {dropdownOpen && (
-            <div
-              ref={dropdownRef}
-              className="absolute right-0 bg-black text-white rounded-lg shadow-lg z-50 mt-2 w-48"
-            >
-              <ul className="space-y-2 p-2">
-                <li>
-                  <Link href="/profile" className="block px-4 py-2 hover:bg-pink-500 rounded-lg">Profile</Link>
-                </li>
-                <li>
-                  <Link href="/settings" className="block px-4 py-2 hover:bg-pink-500 rounded-lg">Settings</Link>
-                </li>
-                <li>
-                  <button onClick={handleLogout} className="block w-full px-4 py-2 text-left text-red-500 hover:bg-pink-500 rounded-lg">Logout</button>
-                </li>
-              </ul>
+          {/* Right Section */}
+          <div className="flex items-center gap-4">
+            {/* Search - Desktop */}
+            <div className="hidden sm:flex relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              <input
+                type="text"
+                placeholder="Search..."
+                className="pl-10 pr-4 py-2 bg-gray-100 dark:bg-slate-800 border-none rounded-xl text-sm focus:ring-2 focus:ring-pink-500 transition-all w-48 lg:w-64"
+              />
             </div>
-          )}
-        </div>
 
-        {/* Mobile menu toggle button */}
-        <div className="absolute top-0 right-0 z-50 block md:hidden mt-8 mr-6">
-          <button onClick={() => setIsOpen(!isOpen)} className="w-6 focus:outline-none">
-            <span className="block w-full h-1 mt-2 bg-gray-800 rounded-full"></span>
-            <span className="block w-full h-1 mt-1 bg-gray-800 rounded-full"></span>
-          </button>
-        </div>
+            {/* Notifications */}
+            <button className="relative p-2 text-gray-500 hover:text-pink-600 transition-colors">
+              <Bell size={22} />
+              <span className="absolute top-2 right-2 w-2 h-2 bg-pink-600 rounded-full border-2 border-white" />
+            </button>
 
-        {/* Mobile Nav */}
-        {isOpen && (
-          <nav className="absolute top-24 left-0 z-40 flex flex-col items-center w-full p-5 text-sm text-gray-800 bg-white border-t border-gray-200 md:hidden">
-            {["Dashboard", "Transactions", "Income Tracker", "Budget"].map((item) => (
-              <Link key={item} href={`/${item.toLowerCase().replace(/\s+/g, '')}`} className="py-2 font-bold hover:text-pink-600 w-full text-center">
-                {item}
+            {/* Profile Dropdown */}
+            <div className="relative" ref={profileRef}>
+              <button
+                onClick={() => setIsProfileOpen(!isProfileOpen)}
+                className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 transition-all"
+              >
+                <div className="w-8 h-8 bg-gradient-to-br from-pink-500 to-indigo-500 rounded-full flex items-center justify-center text-white font-bold text-xs ring-2 ring-pink-100 dark:ring-slate-800">
+                  JD
+                </div>
+                <ChevronDown size={14} className={`text-gray-400 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {isProfileOpen && (
+                <div className="absolute right-0 mt-2 w-56 glass rounded-2xl shadow-2xl p-2 animate-in fade-in zoom-in-95 duration-200">
+                  <div className="px-4 py-3 border-b border-gray-100 dark:border-slate-800">
+                    <p className="text-sm font-bold text-gray-800 dark:text-white">John Doe</p>
+                    <p className="text-xs text-gray-500">Premium Member</p>
+                  </div>
+                  <div className="py-2">
+                    <Link href="/profile" className="flex items-center gap-3 px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-pink-50 dark:hover:bg-pink-900/20 rounded-lg hover:text-pink-600 transition-all">
+                      <User size={16} /> Profile
+                    </Link>
+                    <Link href="/settings" className="flex items-center gap-3 px-4 py-2 text-sm text-gray-600 dark:text-gray-300 hover:bg-pink-50 dark:hover:bg-pink-900/20 rounded-lg hover:text-pink-600 transition-all">
+                      <Settings size={16} /> Settings
+                    </Link>
+                  </div>
+                  <div className="pt-2 border-t border-gray-100 dark:border-slate-800">
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-3 w-full px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
+                    >
+                      <LogOut size={16} /> Logout
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 text-gray-600"
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Nav */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden glass border-t border-pink-100 py-4 px-6 animate-in slide-in-from-top duration-300">
+          <nav className="flex flex-col gap-2">
+            {navItems.map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`px-4 py-3 rounded-xl text-base font-bold transition-all ${
+                  pathname === item.href
+                    ? "bg-pink-600 text-white shadow-lg shadow-pink-200"
+                    : "text-gray-600 hover:bg-gray-50"
+                }`}
+              >
+                {item.name}
               </Link>
             ))}
-            <div className="flex flex-col w-full font-medium border-t border-gray-200 mt-3">
-              <Link href="/login" className="w-full py-2 font-bold text-center text-pink-500">Logout</Link>
-            </div>
           </nav>
-        )}
-
-      </div>
+        </div>
+      )}
     </header>
   );
 };
 
 export default DashboardHeader;
+

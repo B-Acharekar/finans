@@ -1,62 +1,103 @@
-'use client';
+"use client";
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Menu, X } from "lucide-react";
 
 const LandingHeader = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navItems = [
+    { name: "Features", href: "#features" },
+    { name: "Pricing", href: "#pricing" },
+    { name: "Testimonials", href: "#testimonials" },
+  ];
 
   return (
-    <header className="relative z-50 w-full h-24">
-      <div className="container flex items-center justify-center h-full max-w-6xl px-8 mx-auto sm:justify-between xl:px-0">
-
+    <header className={`fixed top-0 z-50 w-full transition-all duration-300 ${
+      scrolled ? "h-20 bg-white/80 backdrop-blur-md border-b border-pink-100 shadow-sm" : "h-24 bg-transparent"
+    }`}>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between">
+        
         {/* Logo */}
-        <Link href="/" className="relative flex items-center h-full font-black leading-none">
-          <img src="/Logo.svg" alt="Finans Logo" className="h-12 w-auto" />
-          <span className="ml-3 text-xl text-white-800">Finans<span className="text-pink-500">.</span></span>
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="p-2 bg-pink-600 rounded-xl transition-transform group-hover:rotate-12">
+            <div className="w-4 h-4 border-2 border-white rounded-sm rotate-45" />
+          </div>
+          <span className={`text-xl font-black transition-colors ${scrolled ? "bg-gradient-to-r from-pink-600 to-indigo-600 bg-clip-text text-transparent" : "text-white"}`}>
+            Finans
+          </span>
         </Link>
 
-        {/* Desktop Menu */}
-        <nav className="hidden md:flex md:flex-row md:items-center lg:text-base">
-          {["Home", "Features", "Pricing", "Testimonials"].map((item) => (
-            <Link key={item} href={`#${item.toLowerCase()}`} className="ml-12 font-bold duration-100 hover:text-pink-600">
-              {item}
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex items-center gap-8">
+          {navItems.map((item) => (
+            <Link 
+              key={item.name} 
+              href={item.href} 
+              className={`text-sm font-bold transition-colors hover:text-pink-600 ${scrolled ? "text-gray-600" : "text-white/80"}`}
+            >
+              {item.name}
             </Link>
           ))}
         </nav>
 
-        {/* CTA buttons (desktop only) */}
-        <div className="hidden md:flex md:items-end md:relative ml-6">
-          <Link href="/login" className="px-3 py-2 mr-3 text-sm font-bold text-pink-500">Login</Link>
-          <Link href="/signup" className="px-5 py-3 text-sm font-bold text-white bg-pink-600 rounded hover:shadow-xl transition-all">Get Started</Link>
+        {/* Auth Buttons */}
+        <div className="hidden md:flex items-center gap-4">
+          <Link 
+            href="/login" 
+            className={`text-sm font-bold transition-colors ${scrolled ? "text-gray-600 hover:text-pink-600" : "text-white hover:text-pink-200"}`}
+          >
+            Login
+          </Link>
+          <Link 
+            href="/signup" 
+            className="px-6 py-2 bg-pink-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-pink-200 transition-all hover:scale-105 active:scale-95"
+          >
+            Get Started
+          </Link>
         </div>
 
         {/* Mobile menu toggle button */}
-        <div className="absolute top-0 right-0 z-50 block md:hidden mt-8 mr-6">
-          <button onClick={() => setIsOpen(!isOpen)} className="w-6 focus:outline-none">
-            <span className="block w-full h-1 mt-2 bg-gray-800 rounded-full"></span>
-            <span className="block w-full h-1 mt-1 bg-gray-800 rounded-full"></span>
-          </button>
-        </div>
-
-        {/* Mobile Nav */}
-        {isOpen && (
-          <nav className="absolute top-24 left-0 z-40 flex flex-col items-center w-full p-5 text-sm text-gray-800 bg-white border-t border-gray-200 md:hidden">
-            {["Home", "Features", "Pricing", "Testimonials"].map((item) => (
-              <Link key={item} href={`#${item.toLowerCase()}`} className="py-2 font-bold hover:text-pink-600 w-full text-center">
-                {item}
-              </Link>
-            ))}
-            <div className="flex flex-col w-full font-medium border-t border-gray-200 mt-3">
-              <Link href="/login" className="w-full py-2 font-bold text-center text-pink-500">Login</Link>
-              <Link href="/signup" className="w-full px-5 py-3 text-sm text-center text-white bg-pink-700 font-bold mt-2 rounded">Get Started</Link>
-            </div>
-          </nav>
-        )}
+        <button 
+          onClick={() => setIsOpen(!isOpen)} 
+          className={`md:hidden p-2 transition-colors ${scrolled ? "text-gray-900" : "text-white"}`}
+        >
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
 
       </div>
+
+      {/* Mobile Nav */}
+      {isOpen && (
+        <nav className="absolute top-full left-0 w-full bg-white border-b border-pink-100 p-6 flex flex-col gap-4 animate-in slide-in-from-top duration-300 md:hidden shadow-xl">
+          {navItems.map((item) => (
+            <Link 
+              key={item.name} 
+              href={item.href} 
+              onClick={() => setIsOpen(false)}
+              className="text-lg font-bold text-gray-800 hover:text-pink-600 py-2"
+            >
+              {item.name}
+            </Link>
+          ))}
+          <div className="h-px bg-gray-100 my-2" />
+          <Link href="/login" className="text-center font-bold text-gray-600 py-2">Login</Link>
+          <Link href="/signup" className="text-center font-bold bg-pink-600 text-white py-3 rounded-xl shadow-lg shadow-pink-100">Get Started</Link>
+        </nav>
+      )}
     </header>
   );
 };
 
 export default LandingHeader;
+
